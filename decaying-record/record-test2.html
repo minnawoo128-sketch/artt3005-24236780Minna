@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Collection of Loss</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      min-height: 100vh;
+      padding: 32px 16px;
+    }
+
+    /* Page Header */
+    .collection-header {
+      max-width: 1200px;
+      margin: 0 auto 32px auto;
+      text-align: center;
+    }
+
+    .collection-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .collection-subtitle {
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    /* Grid layout for all array items */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Scene perspective for 3D card flip */
+    .card-container {
+      width: 100%;
+      height: 520px;
+      perspective: 1000px;
+    }
+
+    /* Inner card wrapper that rotates */
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    /* Class added via JS to trigger individual card flip */
+    .card-container.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Base styling for both faces */
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* FRONT FACE */
+    .card-front {
+      z-index: 2;
+    }
+
+    .card-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Media Box / Placeholder styling */
+    .image-placeholder {
+      width: 100%;
+      height: 240px;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-placeholder img,
+    .image-placeholder video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
+
+    /* Custom Audio Player Controls */
+    .audio-player-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px;
+    }
+
+    .btn-audio-control {
+      background-color: #3b82f6;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .btn-audio-control:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+    }
+
+    .btn-audio-control:active {
+      transform: scale(0.95);
+    }
+
+    .audio-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6b7280;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .audio-error-msg {
+      font-size: 0.75rem;
+      color: #dc2626;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* Typography */
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      text-align: center;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-subtitle {
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Action Buttons */
+    .btn-archive,
+    .btn-unflip {
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #4f46e5;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      touch-action: manipulation;
+    }
+
+    .btn-archive:hover {
+      background-color: #4338ca;
+    }
+
+    .btn-archive:active,
+    .btn-unflip:active {
+      transform: scale(0.98);
+    }
+
+    /* BACK FACE - Archival Specimen Label Style */
+    .card-back {
+      transform: rotateY(180deg);
+      background: #faf8f5;
+      border: 1px solid #d1d5db;
+      font-family: "Courier New", Courier, ui-monospace, SFMono-Regular, Consolas, monospace;
+      color: #27272a;
+    }
+
+    .specimen-label {
+      flex: 1;
+      border: 1px solid #374151;
+      padding: 18px;
+      margin-bottom: 18px;
+      background-color: #fcfbf9;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+    }
+
+    .specimen-header {
+      border-bottom: 2px solid #374151;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .specimen-title {
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #111827;
+    }
+
+    .catalog-number {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #991b1b;
+      letter-spacing: 0.08em;
+    }
+
+    .specimen-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .field-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .field-label {
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+    }
+
+    .field-value {
+      font-size: 0.85rem;
+      color: #1f2937;
+      padding-bottom: 3px;
+      border-bottom: 1px dashed #9ca3af;
+      line-height: 1.3;
+      overflow: hidden;
+    }
+
+    .field-value-text {
+      display: block;
+      opacity: 1;
+      filter: blur(0);
+      letter-spacing: 0;
+    }
+
+    .card-container.flipped .field-value-text {
+      opacity: 0;
+      filter: blur(8px);
+      letter-spacing: 0.55em;
+      transition: opacity 15s ease, filter 15s ease, letter-spacing 15s ease;
+    }
+
+    .card-container.flipped .field-value-text.last-to-go {
+      transition: opacity 3.5s ease 11.5s, filter 3.5s ease 11.5s, letter-spacing 3.5s ease 11.5s;
+    }
+
+    .field-value.multiline {
+      border-bottom: none;
+      background: repeating-linear-gradient(
+        transparent,
+        transparent 20px,
+        #9ca3af 20px,
+        #9ca3af 21px
+      );
+      line-height: 21px;
+      min-height: 50px;
+      font-style: italic;
+    }
+
+    .archival-stamp {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      border: 1.5px solid #065f46;
+      color: #065f46;
+      padding: 3px 8px;
+      font-size: 0.6rem;
+      font-weight: bold;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      opacity: 0.75;
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+    .btn-unflip {
+      background-color: #374151;
+      font-family: inherit;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .btn-unflip:hover {
+      background-color: #1f2937;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #1f2937;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .load-error {
+      font-family: "Courier New", Courier, ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #111827;
+      max-width: 28rem;
+      margin: 80px auto;
+      padding: 24px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="collection-header">
+    <h1 class="collection-title">The Digital Collection of Loss</h1>
+    <p class="collection-subtitle">Click "Archive this" on any card to view its decaying specimen record.</p>
+  </header>
+
+  <main class="card-grid" id="cardGrid"></main>
+
+  <div class="toast" id="toast">Record archived.</div>
+
+  <script>
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function toggleFlip(cardContainer) {
+      const isFlipped = cardContainer.classList.toggle('flipped');
+      if (isFlipped) {
+        showToast('Card archived. Specimen label decaying...');
+      } else {
+        showToast('Returned to front view.');
+      }
+    }
+
+    function createCardElement(record) {
+      const cardContainer = document.createElement('article');
+      cardContainer.className = 'card-container';
+
+      // Determine which media element to show: Video, Sound, or Image
+      let mediaContent = '';
+
+      if (record.video) {
+        mediaContent = `
+          <div class="image-placeholder">
+            <video controls playsinline src="${record.video}"></video>
+          </div>`;
+      } else if (record.sound) {
+        mediaContent = `
+          <div class="image-placeholder">
+             <div class="audio-player-wrapper">
+               <audio class="audio-element" src="${record.sound}" preload="metadata"></audio>
+               <button type="button" class="btn-audio-control" aria-label="Play Audio">
+                 <svg class="play-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                   <path d="M8 5v14l11-7z"/>
+                 </svg>
+                 <svg class="pause-icon" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style="display:none;">
+                   <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                 </svg>
+               </button>
+               <span class="audio-label">Audio Recording</span>
+               <span class="audio-error-msg">Audio file missing</span>
+             </div>
+           </div>`;
+      } else {
+        mediaContent = `
+          <div class="image-placeholder">
+             <img src="${record.image || record.file}" alt="${record.title}">
+           </div>`;
+      }
+
+      cardContainer.innerHTML = `
+        <div class="card-inner">
+          <!-- FRONT FACE -->
+          <section class="card-face card-front">
+            <div class="card-top">
+              ${mediaContent}
+              <h2 class="card-title">${record.title}</h2>
+              <p class="card-subtitle">${record.place}</p>
+            </div>
+
+            <button class="btn-archive">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v1a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+              </svg>
+              <span>Archive this</span>
+            </button>
+          </section>
+
+          <!-- BACK FACE (ARCHIVAL SPECIMEN LABEL) -->
+          <section class="card-face card-back">
+            <div class="specimen-label">
+              <header class="specimen-header">
+                <span class="specimen-title">Archival Specimen</span>
+                <span class="catalog-number">${record.catalog_id || 'REC-000'}</span>
+              </header>
+
+              <div class="specimen-fields">
+                <div class="field-item">
+                  <span class="field-label">1. Title</span>
+                  <div class="field-value"><span class="field-value-text">${record.title}</span></div>
+                </div>
+
+                <div class="field-item">
+                  <span class="field-label">2. Date &amp; Place</span>
+                  <div class="field-value"><span class="field-value-text">${record.date} — ${record.place}</span></div>
+                </div>
+
+                <div class="field-item">
+                  <span class="field-label">3. Recorded by</span>
+                  <div class="field-value"><span class="field-value-text">${record.recorder}</span></div>
+                </div>
+
+                <div class="field-item">
+                  <span class="field-label">4. What was not captured</span>
+                  <div class="field-value multiline">
+                    <span class="field-value-text last-to-go">${record.not_captured}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="archival-stamp">Certainty: ${record.certainty}/5</div>
+            </div>
+
+            <button class="btn-unflip">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+              </svg>
+              <span>Return to Front</span>
+            </button>
+          </section>
+        </div>
+      `;
+
+      // Attach button listeners
+      const archiveBtn = cardContainer.querySelector('.btn-archive');
+      const unflipBtn = cardContainer.querySelector('.btn-unflip');
+
+      archiveBtn.addEventListener('click', () => toggleFlip(cardContainer));
+      unflipBtn.addEventListener('click', () => toggleFlip(cardContainer));
+
+      // Prevent video clicks from flipping card unexpectedly
+      const videoElement = cardContainer.querySelector('video');
+      if (videoElement) {
+        videoElement.addEventListener('click', (e) => e.stopPropagation());
+      }
+
+      // Audio Control Setup
+      const audioBtn = cardContainer.querySelector('.btn-audio-control');
+      const audioElement = cardContainer.querySelector('.audio-element');
+      const errorMsg = cardContainer.querySelector('.audio-error-msg');
+
+      if (audioBtn && audioElement) {
+        const playIcon = audioBtn.querySelector('.play-icon');
+        const pauseIcon = audioBtn.querySelector('.pause-icon');
+
+        audioBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (audioElement.paused) {
+            audioElement.play().then(() => {
+              playIcon.style.display = 'none';
+              pauseIcon.style.display = 'block';
+              if (errorMsg) errorMsg.style.display = 'none';
+            }).catch(err => {
+              console.error('Playback failed:', err);
+              if (errorMsg) {
+                errorMsg.textContent = 'File not found or cannot play';
+                errorMsg.style.display = 'block';
+              }
+            });
+          } else {
+            audioElement.pause();
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+          }
+        });
+
+        audioElement.addEventListener('ended', () => {
+          playIcon.style.display = 'block';
+          pauseIcon.style.display = 'none';
+        });
+
+        audioElement.addEventListener('error', () => {
+          if (errorMsg) {
+            errorMsg.textContent = `Check path: ${record.sound}`;
+            errorMsg.style.display = 'block';
+          }
+        });
+      }
+
+      return cardContainer;
+    }
+
+    // Load array from record.json and render grid
+    fetch('record.json', { cache: 'no-store' })
+      .then(response => {
+        if (!response.ok) throw new Error('record.json did not load');
+        return response.json();
+      })
+      .then(data => {
+        const grid = document.getElementById('cardGrid');
+        const records = Array.isArray(data) ? data : [data];
+        
+        records.forEach(record => {
+          const cardElement = createCardElement(record);
+          grid.appendChild(cardElement);
+        });
+      })
+      .catch(() => {
+        document.body.innerHTML =
+          '<p class="load-error">record.json did not load. Are you serving the folder?<br><br>Run <code>python3 -m http.server 8000</code> in terminal and open <strong>http://localhost:8000</strong></p>';
+      });
+  </script>
+</body>
+</html>

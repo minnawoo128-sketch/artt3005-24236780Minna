@@ -1,10 +1,202 @@
-{
-  "catalog_id": "REC-001",
-  "title": "My grandmother's soup pot",
-  "date": "2026-09-03",
-  "place": "her kitchen, Sham Shui Po",
-  "recorder": "your name",
-  "image": "assets/record.jpg",
-  "not_captured": "the smell, and the sound of the lid",
-  "certainty": 3
-}
+[
+  {
+    "catalog_id": "REC-001",
+    "title": "Studying in the library",
+    "date": "2026-09-03",
+    "place": "Libary, Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_9133.jpg",
+    "not_captured": "the sound of the keyboard ",
+    "certainty": 1
+  },
+  {
+    "catalog_id": "REC-002",
+    "title": "Night Study",
+    "date": "2026-09-04",
+    "place": "Libary, Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_9010.jpg",
+    "not_captured": "the atmosphere of the library ",
+    "certainty": 1
+  },
+  {
+    "catalog_id": "REC-003",
+    "title": "On My Way Home",
+    "date": "2026-09-05",
+    "place": "Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_8998.jpg",
+    "not_captured": "the sound of my steps ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-004",
+    "title": " On My Way Home 2 ",
+    "date": "2026-09-06",
+    "place": " Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_8995.jpg",
+    "not_captured": " the sound of the bus ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-005",
+    "title": "In the class",
+    "date": "2026-09-07",
+    "place": "HKBU, Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_8710.jpg",
+    "not_captured": " my mind is wandering ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-006",
+    "title": "Halloween Party",
+    "date": "2026-09-08",
+    "place": " AVA , Kai Tak ",
+    "recorder": "Minna",
+    "image": "assets/IMG_8387.jpg",
+    "not_captured": " our memories ",
+    "certainty": 4
+  },
+  {
+    "catalog_id": "REC-007",
+    "title": " Cookies in the dormitory",
+    "date": "2026-09-09",
+    "place": "Dormitory, Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_8278(1).jpg",
+    "not_captured": "the smell ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-008",
+    "title": " Tokyo dormitory",
+    "date": "2026-09-10",
+    "place": "Dormitory, Takadobaba",
+    "recorder": "Minna",
+    "image": "assets/IMG_5723.jpg",
+    "not_captured": "the sound of TV ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-009",
+    "title": "1st exhibition",
+    "date": "2026-09-11",
+    "place": "AVA , Kai Tak",
+    "recorder": "Minna",
+    "image": "assets/IMG_1702.jpg",
+    "not_captured": "the happiness of the students ",
+    "certainty": 5
+  },
+  {
+    "catalog_id": "REC-010",
+    "title": " Unforgetable show in Shanghai",
+    "date": "2026-09-12",
+    "place": "Sleep No More Theatre, Shanghai",
+    "recorder": "Minna",
+    "image": "assets/IMG_0312.jpg",
+    "not_captured": "the joy of the audience ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-011",
+    "title": "1st Handheld Fireworks",
+    "date": "2026-09-13",
+    "place": "Nikko City, Tochigi",
+    "recorder": "Minna",
+    "sound": "assets/sound1.mp3",
+    "not_captured": "the sound of the fireworks ",
+    "certainty": 5
+  },
+  {
+    "catalog_id": "REC-012",
+    "title": "1st Baseball Hit",
+    "date": "2026-09-14",
+    "place": "Shinjuku, Tokyo",
+    "recorder": "Minna",
+    "sound": "assets/Sound2.mp3",
+    "not_captured": "the sound of the baseball ",
+    "certainty": 5
+  },
+  {
+    "catalog_id": "REC-013",
+    "title": "Zhuhai Trip",
+    "date": "2026-09-15",
+    "place": "Zhuhai, China",
+    "recorder": "Minna",
+    "image": "assets/IMG_4303.jpg",
+    "not_captured": "the heat ",
+    "certainty": 4
+  },
+  {
+    "catalog_id": "REC-014",
+    "title": " Grad Trip ",
+    "date": "2026-09-16",
+    "place": "ooyama, Tokyo",
+    "recorder": "Minna",
+    "image": "assets/photo1.jpg",
+    "not_captured": "the happiness and excitment",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-015",
+    "title": " 1st Self-made Furniture",
+    "date": "2026-09-17",
+    "place": "HKBU , Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_4016.jpg",
+    "not_captured": "the smell ",
+    "certainty": 5
+  },
+  {
+    "catalog_id": "REC-016",
+    "title": " Tired...",
+    "date": "2026-09-18",
+    "place": "Stairs, Edu ",
+    "recorder": "Minna",
+    "image": "assets/IMG_4115.PNG",
+    "not_captured": "the emotion ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-017",
+    "title": "Pull Over Night",
+    "date": "2026-09-19",
+    "place": "CVA, Kowloon Tong",
+    "recorder": "Minna",
+    "image": "assets/IMG_5707.jpg",
+    "not_captured": "the slient ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-018",
+    "title": "Giant Slime",
+    "date": "2026-09-20",
+    "place": "Megabox, Kowloon Bay",
+    "recorder": "Minna",
+    "image": "assets/IMG_8391.jpg",
+    "not_captured": "the smell ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-019",
+    "title": "Boat",
+    "date": "2026-09-21",
+    "place": "AVA, Kowloon Tong",
+    "recorder": "Minna",
+    "video": "assets/video2.mp4",
+    "not_captured": "the craziness ",
+    "certainty": 3
+  },
+  {
+    "catalog_id": "REC-020",
+  "title": "Bicycle",
+  "date": "2026-09-21",
+  "place": "Cheung Chau, Hong Kong",
+  "recorder": "Minna",
+  "video": "assets/video1.mp4",
+  "not_captured": "the texture if bicycle handle ",
+  "certainty": 4
+  }
+]
